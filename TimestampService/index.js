@@ -20,7 +20,7 @@ app.get("/", function(req, res) {
 const dateToTimestamp = (dateString) => Date.parse(dateString)
 
 // Return: A string representing the given date using the UTC time zone. Returns "Invalid Date" if the date is invalid.
-const timestampToDate = (value) => new Date(value * 1000).toUTCString();
+const timestampToDate = (value) => new Date(value).toUTCString();
 
 // API endpoints
 
@@ -30,6 +30,7 @@ app.get("/api/hello", function (req, res) {
 
 app.get("/api/:date", function (req, res) {
 
+  let result;
   let dateString = req.params.date;
   let timestamp = dateToTimestamp(dateString);
 
@@ -38,11 +39,13 @@ app.get("/api/:date", function (req, res) {
 
   if(!timestamp) {
     unix = dateString;
-    utc = timestampToDate(dateString);
-    if(utc === "Invalid Date") unix = utc
+    utc = timestampToDate(Number(dateString));
   }
 
-  res.json({ unix, utc});
+  if(utc === "Invalid Date") result = { error : "Invalid Date" }
+  else result = { unix, utc}
+
+  res.json(result);
 });
 
 // Starting the server
