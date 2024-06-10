@@ -28,6 +28,14 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+app.get("/api/", function(req, res) {
+
+  let currentDate = new Date().toUTCString();
+  let unix = dateToTimestamp(currentDate);
+  
+  res.json({ unix, utc: currentDate})
+});
+
 app.get("/api/:date", function (req, res) {
 
   let result;
