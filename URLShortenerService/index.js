@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const cors = require('cors');
 const app = express();
+require('./database');
+const URLShortener = require('./urlshortenerModel');
 
 // Settings
 app.set("port", process.env.PORT || 3000);
@@ -24,21 +26,23 @@ app.get('/api/hello', function(req, res) {
 
 app.post('/api/shorturl', function(req, res) {
 
-  let original_url = req.body.url;
-
   try {
+
+    let original_url = req.body.url;
 
     let url = new URL(original_url);
 
-    //TODO: checking saved URL
-
-    dns.lookup(url.hostname, (err, address, family) => {
+    dns.lookup(url.hostname, async (err, address, family) => {
 
       let short_url = Date.now().toString(36) + Math.random().toFixed(2).slice(2);
 
-      //TODO: save URL
+      const urlshortener = { original_url, short_url }
 
-      res.json({ original_url, short_url });
+      const newValue = new URLShortener(urlshortener);
+
+      await newValue.save();
+
+      res.json(urlshortener);
   
     });
 
