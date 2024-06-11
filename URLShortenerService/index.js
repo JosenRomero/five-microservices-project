@@ -52,14 +52,20 @@ app.post('/api/shorturl', function(req, res) {
 
 });
 
-app.get('/api/shorturl/:shortURL', function(req, res) {
+app.get('/api/shorturl/:shortURL', async (req, res) => {
 
-  let url = req.params.shortURL;
+  try {
 
-  //TODO: checking saved URL
+    const short_url = req.params.shortURL;
 
-  //TODO: redirected to the original URL
- 
+    const { original_url } = await URLShortener.findOne({ short_url });
+
+    res.redirect(original_url);
+
+  } catch(err) {
+    res.status(404).send({ msgError: "URL not found" });
+  }
+
 });
 
 // Starting the server
