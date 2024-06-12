@@ -32,9 +32,13 @@ app.post('/api/shorturl', function(req, res) {
 
     let url = new URL(original_url);
 
+    if(!url.protocol.includes("http")) throw "error"
+
     dns.lookup(url.hostname, async (err, address, family) => {
 
-      let short_url = Date.now().toString(36) + Math.random().toFixed(2).slice(2);
+      //let short_url = Date.now().toString(36) + Math.random().toFixed(2).slice(2);
+
+      const short_url = await URLShortener.countDocuments({});
 
       const urlshortener = { original_url, short_url }
 
