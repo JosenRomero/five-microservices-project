@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import 'dotenv/config'
 import './database.js'
+import User from './models/userModel.js'
 
 const app = express()
 
@@ -15,12 +16,24 @@ app.get('/', (req, res) => {
   res.sendFile(`${process.cwd()}/views/index.html`)
 });
 
-app.post('/api/users', (req, res) => {
+app.post('/api/users', async (req, res) => {
 
-  res.json({
-    username: req.body.username,
-    _id: "123456"
-  })
+  try {
+
+    const newUser = new User({
+      username: req.body.username
+    })
+
+    const { username, _id } = await newUser.save()
+
+    res.json({
+      username,
+      _id
+    })
+
+  } catch(err) {
+    res.status(400).send({ err: "Failed to new user" })
+  }
 
 });
 
