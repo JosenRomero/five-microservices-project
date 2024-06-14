@@ -3,6 +3,8 @@ import cors from 'cors'
 import 'dotenv/config'
 import './database.js'
 import User from './models/userModel.js'
+import Exercise from './models/exerciseModel.js'
+import { formatDate } from './utils.js'
 
 const app = express()
 
@@ -37,19 +39,42 @@ app.post('/api/users', async (req, res) => {
 
 });
 
-app.post('/api/users/:_id/exercises', (req, res) => {
+app.post('/api/users/:_id/exercises', async (req, res) => {
 
-  const _id = req.params._id
+  try {
 
-  const { description, duration, date } = req.body
+    const _id = req.params._id
 
-  res.json({
-    username: "test",
-    description,
-    duration,
-    date,
-    _id
-  })
+    const { description, duration, date } = req.body
+
+    const { username } = await User.findById(_id)
+
+    const durationValue = Number(duration)
+
+    const formattedDate = formatDate(date)
+
+    if(!username || typeof description !== 'string' || !durationValue || formattedDate === "Invalid Date") throw new Error()
+
+    const newExercise = new Exercise({
+      userID: _id,
+      description,
+      duration: durationValue,
+      date: formattedDate
+    })
+
+    await newExercise.save()
+
+    res.json({
+      username,
+      description,
+      duration: durationValue,
+      date: formattedDate,
+      _id
+    })
+
+  } catch(err) {
+    res.status(400).send({ err: "Failed to new exercise" })
+  }
 
 });
 
