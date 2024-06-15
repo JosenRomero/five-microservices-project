@@ -18,6 +18,20 @@ app.get('/', (req, res) => {
   res.sendFile(`${process.cwd()}/views/index.html`)
 });
 
+app.get('/api/users', async (req, res) => {
+
+  try {
+
+    const users = await User.find({}, 'username _id')
+
+    res.json({ users })
+
+  } catch(err) {
+    res.status(400).send({ err: "Failed to get users" })
+  }
+
+});
+
 // /api/users/:_id/logs?from&to&limit
 app.get('/api/users/:_id/logs', async (req, res) => {
 
@@ -38,11 +52,10 @@ app.get('/api/users/:_id/logs', async (req, res) => {
       username,
       _id,
       count: logsSelected.length,
-      logs: logsSelected
+      log: logsSelected
     })
 
   } catch(err) {
-    console.log(err)
     res.status(500).send({ err: "Something went wrong." })
 
   }
