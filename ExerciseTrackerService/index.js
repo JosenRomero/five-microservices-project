@@ -51,15 +51,16 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
 
     const durationValue = Number(duration)
 
-    const formattedDate = formatDate(date)
+    const { formattedDate, timestamps } = formatDate(date)
 
-    if(!username || typeof description !== 'string' || !durationValue || formattedDate === "Invalid Date") throw new Error()
+    if(!username || typeof description !== 'string' || !durationValue || formattedDate === "Invalid Date" || !timestamps) throw new Error()
 
     const newExercise = new Exercise({
       userID: _id,
       description,
       duration: durationValue,
-      date: formattedDate
+      date: formattedDate,
+      timestamps
     })
 
     await newExercise.save()

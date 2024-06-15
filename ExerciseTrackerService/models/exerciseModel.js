@@ -17,6 +17,10 @@ const ExerciseSchema = new Schema({
   date: {
     type: String,
     require: true
+  },
+  timestamps: {
+    type: String,
+    require: true
   }
 })
 
