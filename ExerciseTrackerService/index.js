@@ -4,7 +4,7 @@ import 'dotenv/config'
 import './database.js'
 import User from './models/userModel.js'
 import Exercise from './models/exerciseModel.js'
-import { formatDate } from './utils.js'
+import { formatDate, checkFiltersForLogs } from './utils.js'
 
 const app = express()
 
@@ -16,6 +16,37 @@ app.use(express.static('public'))
 
 app.get('/', (req, res) => {
   res.sendFile(`${process.cwd()}/views/index.html`)
+});
+
+// /api/users/:_id/logs?from&to&limit
+app.get('/api/users/:_id/logs', async (req, res) => {
+
+  try {
+
+    const { from, to, limit } = req.query
+
+    const { username, _id } = await User.findById(req.params._id)
+
+    let filters = checkFiltersForLogs({ from, to, _id})
+
+    const logs = await Exercise.find(filters, 'description duration date -_id')
+
+    const limitValue = Number(limit)
+    let logsSelected = (limitValue && limitValue < logs.length) ? [...logs].slice(0, limitValue) : [...logs]
+
+    res.json({
+      username,
+      _id,
+      count: logsSelected.length,
+      logs: logsSelected
+    })
+
+  } catch(err) {
+    console.log(err)
+    res.status(500).send({ err: "Something went wrong." })
+
+  }
+
 });
 
 app.post('/api/users', async (req, res) => {
