@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>File Metadata</title>
+    <link rel="shortcut icon" href="https://cdn.freecodecamp.org/universal/favicons/favicon-32x32.png" type="image/x-icon" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+    <link href="/public/style.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <header>
+      <h1>API Project: File Metadata Microservice</h1>
+      <h2>It was built based on the boilerplate available <a href="https://github.com/freeCodeCamp/boilerplate-project-filemetadata/" target="_blank">here</a>.</h2>
+    </header>
+    <main>
+      <h2>Usage:</h2>
+      <p>Please Upload a File ...</p>
+      <div class="view">
+        <h3 id="output"></h3>
+        <form enctype="multipart/form-data" method="POST" action="/api/fileanalyse">
+          <input id="inputfield" type="file" name="upfile">
+          <button id="button" type="submit">Upload</button>
+        </form>
+      </div>
+    </main>
+    <footer>
+      <p>
+        By <a href="https://github.com/JosenRomero" target="_blank">José Romero</a> for <a href="https://www.freecodecamp.org/" target="_blank">freeCodeCamp.org</a>
+      </p>
+    </footer>
+  </body>
+</html>
