@@ -30,7 +30,7 @@ header {
   text-align: center;
 }
 
-#button {
+#inputfield::file-selector-button, #button {
   background-color: #06b6d4;
   color: #fff;
   padding: 0.5rem 2rem;
@@ -38,8 +38,12 @@ header {
   border-radius: .375rem;
 }
 
-#button:hover {
+#inputfield::file-selector-button:hover, #button:hover {
   background-color: #0891b2;
+}
+
+#button {
+  margin-top: 40px;
 }
 
 .view {
